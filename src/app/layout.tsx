@@ -1,5 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { site } from "@/lib/site";
 import "./globals.css";
 
 const newsreader = localFont({
@@ -20,9 +23,24 @@ const plex = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Recouvre — Relance tes factures impayées jusqu'à la mise en demeure",
-  description:
-    "L'argent est dû, il n'est simplement jamais demandé. Recouvre relance tes clients à 7, 15 et 30 jours, puis prépare la mise en demeure.",
+  metadataBase: new URL(site.url),
+  title: {
+    default: `Recouvre — ${site.promesse}`,
+    template: "%s · Recouvre",
+  },
+  description: site.description,
+  openGraph: {
+    type: "website",
+    locale: "fr_FR",
+    siteName: "Recouvre",
+    title: site.promesse,
+    description: site.description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: site.promesse,
+    description: site.description,
+  },
 };
 
 export const viewport: Viewport = {
@@ -36,7 +54,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr" className={`${newsreader.variable} ${plex.variable}`}>
-      <body className="antialiased">{children}</body>
+      <body className="flex min-h-dvh flex-col antialiased max-sm:has-[.cta-fixe]:pb-24">
+        <Header />
+        <div className="flex-1">{children}</div>
+        <Footer />
+      </body>
     </html>
   );
 }
